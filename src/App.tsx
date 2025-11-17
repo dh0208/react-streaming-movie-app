@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProviderWrapper } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
@@ -63,9 +63,9 @@ const AppRoutes: React.FC = () => {
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <AuthProvider>
+      <AuthProviderWrapper>
         <AppRoutes />
-      </AuthProvider>
+      </AuthProviderWrapper>
     </BrowserRouter>
   );
 };

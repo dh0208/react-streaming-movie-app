@@ -1,4 +1,4 @@
-import type { User, LoginCredentials, RegisterCredentials } from '../types';
+import type { User } from '../types';
 
 const STORAGE_KEYS = {
   USERS: 'movieapp_users',

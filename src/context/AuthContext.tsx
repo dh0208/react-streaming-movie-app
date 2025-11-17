@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import type { User, LoginCredentials, RegisterCredentials, AuthProvider } from '../types';
 import { AuthService } from '../services/api';
 import { StorageService } from '../services/storage';
@@ -15,7 +15,7 @@ interface AuthContextValue {
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProviderWrapper: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

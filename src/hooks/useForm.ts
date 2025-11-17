@@ -1,4 +1,4 @@
-import { useState, useCallback, FormEvent } from 'react';
+import { useState, useCallback, type FormEvent } from 'react';
 
 interface UseFormReturn<T> {
   values: T;

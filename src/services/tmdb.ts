@@ -70,6 +70,7 @@ class TMDBService {
   }
 
   private getMockData(endpoint: string): unknown {
+    console.log("endpoint",endpoint)
     // Return mock data based on endpoint
     const mockResponse: MovieResponse = {
       page: 1,
