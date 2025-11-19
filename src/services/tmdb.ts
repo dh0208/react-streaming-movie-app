@@ -3,7 +3,8 @@ import type {   MovieResponse, PopularMovieListResponse, TopRatedMovieListRespon
 
 
 const BASE_URL = 'https://api.themoviedb.org/3';
-const ACCESS_TOKEN = ''
+// Currently for demo purposes only. In a real application, store this securely.
+const ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZWU1NzczMzk3YzI3MzkxNWZkYTA2ZWZkMTVlZDY3YyIsIm5iZiI6MTc2MzQwNjI0Ni4wMiwic3ViIjoiNjkxYjcxYTY5NDg3OTg5ZmY0NjA5YTg2Iiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.oq3XcVMHj6UlxKr-FUBUXckgxoy5I_ZowX-7iXvTKPk'
 
 
 const apiClient = axios.create({
