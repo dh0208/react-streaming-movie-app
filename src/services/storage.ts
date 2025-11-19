@@ -65,5 +65,38 @@ export const StorageService = {
     const favorites = this.getFavorites(userId);
     return favorites.includes(movieId);
   },
+  // Favorites as full movie objects (stored per-user)
+  getFavoriteMovies(userId: string) {
+    const favoritesKey = `${STORAGE_KEYS.FAVORITES}_${userId}_objects`;
+    const favorites = localStorage.getItem(favoritesKey);
+    return favorites ? JSON.parse(favorites) : [];
+  },
+
+  addFavoriteMovie(userId: string, movie: any) {
+    const favoritesKey = `${STORAGE_KEYS.FAVORITES}_${userId}_objects`;
+    const favorites = this.getFavoriteMovies(userId);
+    const exists = favorites.some((m: any) => m.id === movie.id);
+    if (!exists) {
+      favorites.push(movie);
+      localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+    }
+    // keep ID list in sync for quick checks
+    this.addFavorite(userId, movie.id);
+  },
+
+  updateFavoriteMovie(userId: string, movie: any) {
+    const favoritesKey = `${STORAGE_KEYS.FAVORITES}_${userId}_objects`;
+    const favorites = this.getFavoriteMovies(userId).map((m: any) => (m.id === movie.id ? movie : m));
+    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+  },
+
+  removeFavoriteMovie(userId: string, movieId: number) {
+    const favoritesKey = `${STORAGE_KEYS.FAVORITES}_${userId}_objects`;
+    let favorites = this.getFavoriteMovies(userId);
+    favorites = favorites.filter((m: any) => m.id !== movieId);
+    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+    // keep ID list in sync
+    this.removeFavorite(userId, movieId);
+  },
 };
 

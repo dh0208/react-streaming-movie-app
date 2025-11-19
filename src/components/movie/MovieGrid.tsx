@@ -1,10 +1,11 @@
 import React from 'react';
+import { MdLocalMovies } from 'react-icons/md';
 import type { Movie } from '../../types';
 import { MovieCard } from './MovieCard';
 
 interface MovieGridProps {
   movies: Movie[];
-  onFavoriteToggle?: (movieId: number) => void;
+  onFavoriteToggle?: (movie: Movie) => void;
   isFavorite?: (movieId: number) => boolean;
 }
 
@@ -16,19 +17,7 @@ export const MovieGrid: React.FC<MovieGridProps> = ({
   if (movies.length === 0) {
     return (
       <div className="text-center py-12">
-        <svg
-          className="mx-auto h-12 w-12 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
-          />
-        </svg>
+        <MdLocalMovies className="mx-auto h-12 w-12 text-gray-400" />
         <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-white">
           No movies found
         </h3>
@@ -52,4 +41,3 @@ export const MovieGrid: React.FC<MovieGridProps> = ({
     </div>
   );
 };
-

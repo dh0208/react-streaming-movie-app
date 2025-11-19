@@ -1,4 +1,6 @@
-import React, { useEffect, type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { IoClose } from 'react-icons/io5';
 
 interface ModalProps {
   isOpen: boolean;
@@ -15,21 +17,7 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   size = 'md',
 }) => {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  const sizeClasses = {
+  const sizeClasses: Record<'sm' | 'md' | 'lg' | 'xl', string> = {
     sm: 'max-w-md',
     md: 'max-w-lg',
     lg: 'max-w-2xl',
@@ -37,40 +25,36 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center p-4">
-        {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-          onClick={onClose}
-        ></div>
-
-        {/* Modal */}
-        <div
-          className={`relative bg-white dark:bg-dark-800 rounded-lg shadow-xl w-full ${sizeClasses[size]} animate-slide-up`}
-        >
+    <Dialog.Root open={isOpen} onOpenChange={onClose}>
+      <Dialog.Portal>
+        {/* Backdrop Overlay */}
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 transition-opacity data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        
+        {/* Dialog Content */}
+        <Dialog.Content className={`fixed left-1/2 top-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 rounded-lg bg-dark-800 shadow-xl border border-dark-700 ${sizeClasses[size]} animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]`}>
           {/* Header */}
           {title && (
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-dark-700">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-dark-700">
+              <Dialog.Title className="text-xl font-semibold text-white">
                 {title}
-              </h2>
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              </Dialog.Title>
+              <Dialog.Close asChild>
+                <button
+                  className="text-gray-400 hover:text-white transition-colors inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-dark-700"
+                  aria-label="Close"
+                >
+                  <IoClose className="w-5 h-5" />
+                </button>
+              </Dialog.Close>
             </div>
           )}
 
           {/* Content */}
-          <div className="p-6">{children}</div>
-        </div>
-      </div>
-    </div>
+          <div className="overflow-hidden h-full px-6 py-6">
+            {children}
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
-

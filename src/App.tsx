@@ -6,7 +6,6 @@ import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
 import { MovieDetailsPage } from './pages/MovieDetailsPage';
 import { FavoritesPage } from './pages/FavoritesPage';
-import { SearchPage } from './pages/SearchPage';
 import { Loading } from './components/common/Loading';
 
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
@@ -44,14 +43,6 @@ const AppRoutes: React.FC = () => {
         element={
           <PrivateRoute>
             <FavoritesPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/search"
-        element={
-          <PrivateRoute>
-            <SearchPage />
           </PrivateRoute>
         }
       />

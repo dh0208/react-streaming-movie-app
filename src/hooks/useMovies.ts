@@ -1,48 +1,40 @@
 import { useState, useEffect, useCallback } from 'react';
-import { tmdbService } from '../services/tmdb';
-import type { Movie, MovieDetails, MovieResponse } from '../types';
+import { getNowPlayingMovieList, getPopularMovies, getTopRatedMovies, getUpcomingMovies, getMovieDetails, searchMovies } from '../services/tmdb';
+import type { Movie, MovieDetails } from '../types';
 
-interface UseMoviesReturn {
-  movies: Movie[];
-  loading: boolean;
-  error: string | null;
-  hasMore: boolean;
-  loadMore: () => void;
-}
-
-export const useMovies = (
-  fetchFunction: (page: number) => Promise<MovieResponse>
-): UseMoviesReturn => {
+export const useNowPlayingMovies = (
+) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const loadMovies = useCallback(async (pageNum: number) => {
+  const loadMovies = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetchFunction(pageNum);
+       const response = await getNowPlayingMovieList(page);
+        console.log("response",response)
       
-      setMovies(prev => pageNum === 1 ? response.results : [...prev, ...response.results]);
-      setHasMore(pageNum < response.total_pages);
+      setMovies(prev => page === 1 ? response?.data?.results : [...prev, ...response.data?.results]);
+      setHasMore(page < response?.data?.total_pages);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load movies');
     } finally {
       setLoading(false);
     }
-  }, [fetchFunction]);
+  }, [page]);
 
   useEffect(() => {
-    loadMovies(1);
-  }, [loadMovies]);
+    loadMovies();
+  }, [loadMovies,page]);
 
   const loadMore = useCallback(() => {
     if (!loading && hasMore) {
       const nextPage = page + 1;
       setPage(nextPage);
-      loadMovies(nextPage);
+      loadMovies();
     }
   }, [loading, hasMore, page, loadMovies]);
 
@@ -61,8 +53,8 @@ export const useMovieDetails = (movieId: number | null) => {
       try {
         setLoading(true);
         setError(null);
-        const data = await tmdbService.getMovieDetails(movieId);
-        setMovie(data);
+        const response = await getMovieDetails(movieId);
+        setMovie(response.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load movie details');
       } finally {
@@ -87,12 +79,12 @@ export const useSearchMovies = (query: string) => {
       return;
     }
 
-    const searchMovies = async () => {
+    const searchQuery = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await tmdbService.searchMovies(query);
-        setMovies(response.results);
+        const response = await searchMovies(query);
+        setMovies(response.data?.results || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to search movies');
       } finally {
@@ -100,9 +92,123 @@ export const useSearchMovies = (query: string) => {
       }
     };
 
-    searchMovies();
+    searchQuery();
   }, [query]);
 
   return { movies, loading, error };
 };
 
+
+export const usePopularMovies= (
+) => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadPopularMovies = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+       const response = await getPopularMovies(page);
+      
+      setMovies(prev => page === 1 ? response?.data?.results : [...prev, ...response.data?.results]);
+      setHasMore(page < response?.data?.total_pages);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load movies');
+    } finally {
+      setLoading(false);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    loadPopularMovies();
+  }, [loadPopularMovies,page]);
+
+  const loadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      loadPopularMovies();
+    }
+  }, [loading, hasMore, page, loadPopularMovies]);
+
+  return { movies, loading, error, hasMore, loadMore };
+};
+
+export const useTopRatedMovies= (
+) => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadTopRatedMovies = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+       const response = await getTopRatedMovies(page);
+      
+      setMovies(prev => page === 1 ? response?.data?.results : [...prev, ...response.data?.results]);
+      setHasMore(page < response?.data?.total_pages);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load movies');
+    } finally {
+      setLoading(false);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    loadTopRatedMovies();
+  }, [loadTopRatedMovies,page]);
+
+  const loadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      loadTopRatedMovies();
+    }
+  }, [loading, hasMore, page, loadTopRatedMovies]);
+
+  return { movies, loading, error, hasMore, loadMore };
+};
+
+export const useUpcomingMovies= (
+) => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadUpcomingMovies = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+       const response = await getUpcomingMovies(page);
+      
+      setMovies(prev => page === 1 ? response?.data?.results : [...prev, ...response.data?.results]);
+      setHasMore(page < response?.data?.total_pages);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load movies');
+    } finally {
+      setLoading(false);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    loadUpcomingMovies();
+  }, [loadUpcomingMovies,page]);
+
+  const loadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      loadUpcomingMovies();
+    }
+  }, [loading, hasMore, page, loadUpcomingMovies]);
+
+  return { movies, loading, error, hasMore, loadMore };
+};

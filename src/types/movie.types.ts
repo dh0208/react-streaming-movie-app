@@ -1,28 +1,43 @@
-export interface Movie {
-  id: number;
-  title: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  overview: string;
-  release_date: string;
-  vote_average: number;
-  vote_count: number;
-  genre_ids?: number[];
-  popularity: number;
-  original_language: string;
+export interface MovieResponse {
+  dates: {
+    maximum: string;
+    minimum: string;
+  };
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
 }
 
-export interface MovieDetails extends Movie {
-  runtime: number;
-  genres: Genre[];
-  production_companies: ProductionCompany[];
-  budget: number;
-  revenue: number;
-  tagline: string;
-  status: string;
-  homepage: string;
-  credits?: Credits;
-  videos?: VideoResponse;
+export interface Movie {
+  adult: boolean;
+  backdrop_path: string | null;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string | null;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface PopularMovieListResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+export interface TopRatedMovieListResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
 }
 
 export interface Genre {
@@ -32,9 +47,20 @@ export interface Genre {
 
 export interface ProductionCompany {
   id: number;
-  name: string;
   logo_path: string | null;
+  name: string;
   origin_country: string;
+}
+
+export interface ProductionCountry {
+  iso_3166_1: string;
+  name: string;
+}
+
+export interface SpokenLanguage {
+  english_name: string;
+  iso_639_1: string;
+  name: string;
 }
 
 export interface Cast {
@@ -42,14 +68,12 @@ export interface Cast {
   name: string;
   character: string;
   profile_path: string | null;
-  order: number;
 }
 
 export interface Crew {
   id: number;
   name: string;
   job: string;
-  department: string;
   profile_path: string | null;
 }
 
@@ -60,22 +84,36 @@ export interface Credits {
 
 export interface Video {
   id: string;
+  iso_639_1: string;
+  iso_3166_1: string;
   key: string;
   name: string;
-  site: string;
-  type: string;
   official: boolean;
   published_at: string;
+  site: string;
+  size: number;
+  type: string;
 }
 
-export interface VideoResponse {
+export interface Videos {
   results: Video[];
 }
 
-export interface MovieResponse {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
+export interface MovieDetails extends Movie {
+  belongs_to_collection: unknown | null;
+  budget: number;
+  genres: Genre[];
+  homepage: string | null;
+  imdb_id: string | null;
+  origin_country: string[];
+  production_companies: ProductionCompany[];
+  production_countries: ProductionCountry[];
+  revenue: number;
+  runtime: number;
+  spoken_languages: SpokenLanguage[];
+  status: string;
+  tagline: string | null;
+  credits?: Credits;
+  videos?: Videos;
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { AiOutlineHeart } from 'react-icons/ai';
 import type { Movie } from '../../types';
 import { MovieGrid } from '../movie/MovieGrid';
 import { Loading } from '../common/Loading';
@@ -6,7 +7,7 @@ import { Loading } from '../common/Loading';
 interface FavoritesListProps {
   favorites: Movie[];
   loading: boolean;
-  onFavoriteToggle: (movieId: number) => void;
+  onFavoriteToggle: (movie: Movie) => void;
 }
 
 export const FavoritesList: React.FC<FavoritesListProps> = ({
@@ -21,19 +22,7 @@ export const FavoritesList: React.FC<FavoritesListProps> = ({
   if (favorites.length === 0) {
     return (
       <div className="text-center py-16">
-        <svg
-          className="mx-auto h-24 w-24 text-gray-400 mb-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-          />
-        </svg>
+        <AiOutlineHeart className="mx-auto h-24 w-24 text-gray-400 mb-4" />
         <h3 className="text-2xl font-bold text-white mb-2">No favorites yet</h3>
         <p className="text-gray-400 mb-8">
           Start adding movies to your favorites to see them here
@@ -52,9 +41,8 @@ export const FavoritesList: React.FC<FavoritesListProps> = ({
       <MovieGrid
         movies={favorites}
         onFavoriteToggle={onFavoriteToggle}
-        isFavorite={() => true}
+        isFavorite={(id: number) => favorites.some(f => f.id === id)}
       />
     </div>
   );
 };
-

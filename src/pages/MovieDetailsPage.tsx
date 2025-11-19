@@ -49,7 +49,7 @@ export const MovieDetailsPage: React.FC = () => {
     <Layout>
       <MovieDetails
         movie={movie}
-        onFavoriteToggle={() => toggleFavorite(movie.id)}
+        onFavoriteToggle={toggleFavorite}
         isFavorite={isFavorite(movie.id)}
         onPlayTrailer={trailer ? () => setShowTrailer(true) : undefined}
       />

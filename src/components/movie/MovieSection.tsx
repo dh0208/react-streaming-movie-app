@@ -1,11 +1,12 @@
 import React, { useRef } from 'react';
+import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import type { Movie } from '../../types';
 import { MovieCard } from './MovieCard';
 
 interface MovieSectionProps {
   title: string;
   movies: Movie[];
-  onFavoriteToggle?: (movieId: number) => void;
+  onFavoriteToggle?: (movie: Movie) => void;
   isFavorite?: (movieId: number) => boolean;
 }
 
@@ -47,18 +48,14 @@ export const MovieSection: React.FC<MovieSectionProps> = ({
             className="p-2 bg-dark-700 hover:bg-dark-600 rounded-lg transition-colors"
             aria-label="Scroll left"
           >
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <IoChevronBack className="w-6 h-6 text-white" />
           </button>
           <button
             onClick={() => scroll('right')}
             className="p-2 bg-dark-700 hover:bg-dark-600 rounded-lg transition-colors"
             aria-label="Scroll right"
           >
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <IoChevronForward className="w-6 h-6 text-white" />
           </button>
         </div>
       </div>
@@ -66,9 +63,7 @@ export const MovieSection: React.FC<MovieSectionProps> = ({
       {/* Scrollable Movie List */}
       <div
         ref={scrollContainerRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
+        className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"      >
         {movies.map((movie) => (
           <div key={movie.id} className="flex-shrink-0 w-40 sm:w-48 snap-start">
             <MovieCard
@@ -82,4 +77,3 @@ export const MovieSection: React.FC<MovieSectionProps> = ({
     </div>
   );
 };
-

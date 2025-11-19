@@ -1,10 +1,12 @@
 import React from 'react';
+import { AiFillStar, AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { FaPlay } from 'react-icons/fa';
 import type { MovieDetails as MovieDetailsType } from '../../types';
 import { getImageUrl, formatDate, formatRuntime, formatCurrency } from '../../utils/helpers';
 
 interface MovieDetailsProps {
   movie: MovieDetailsType;
-  onFavoriteToggle: () => void;
+  onFavoriteToggle: (movie: MovieDetailsType) => void;
   isFavorite: boolean;
   onPlayTrailer?: () => void;
 }
@@ -36,7 +38,7 @@ export const MovieDetails: React.FC<MovieDetailsProps> = ({
       <div className="relative container mx-auto px-4 pt-32 pb-12">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Poster */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 lg:block hidden">
             <img
               src={getImageUrl(movie.poster_path, 'w500')}
               alt={movie.title}
@@ -57,9 +59,7 @@ export const MovieDetails: React.FC<MovieDetailsProps> = ({
             {/* Meta Info */}
             <div className="flex flex-wrap items-center gap-4 mb-6">
               <div className="flex items-center gap-2 px-3 py-1 bg-yellow-500 rounded-lg">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+                <AiFillStar className="w-5 h-5 text-white" />
                 <span className="font-bold text-white">{movie.vote_average.toFixed(1)}</span>
               </div>
 
@@ -91,34 +91,24 @@ export const MovieDetails: React.FC<MovieDetailsProps> = ({
                   onClick={onPlayTrailer}
                   className="flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-semibold transition-colors"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                  </svg>
+                  <FaPlay className="w-5 h-5" />
                   Play Trailer
                 </button>
               )}
               
               <button
-                onClick={onFavoriteToggle}
+                onClick={() => onFavoriteToggle(movie)}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors ${
                   isFavorite
                     ? 'bg-red-600 hover:bg-red-700 text-white'
                     : 'bg-dark-700 hover:bg-dark-600 text-white'
                 }`}
               >
-                <svg
-                  className={`w-5 h-5 ${isFavorite ? 'fill-white' : ''}`}
-                  fill={isFavorite ? 'currentColor' : 'none'}
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
+                {isFavorite ? (
+                  <AiFillHeart className="w-5 h-5" />
+                ) : (
+                  <AiOutlineHeart className="w-5 h-5" />
+                )}
                 {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
               </button>
             </div>
@@ -182,4 +172,3 @@ export const MovieDetails: React.FC<MovieDetailsProps> = ({
     </div>
   );
 };
-
