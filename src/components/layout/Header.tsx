@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BiCameraMovie } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlineHeart } from 'react-icons/ai';
 import { useAuth } from '../../hooks/useAuth';
@@ -7,7 +7,6 @@ import { useAuth } from '../../hooks/useAuth';
 export const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
 

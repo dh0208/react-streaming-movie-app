@@ -3,33 +3,33 @@ import { StorageService } from './storage';
 import { validateEmail, validatePassword, validateName } from '../utils/validators';
 import { generateId } from '../utils/helpers';
 
-export class AuthenticationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'AuthenticationError';
-  }
+// replace the class-based error with a simple factory that returns an Error
+export function authError(message: string): Error {
+  const e = new Error(message);
+  e.name = 'AuthenticationError';
+  return e;
 }
 
 export const AuthService = {
   async register(credentials: RegisterCredentials): Promise<User> {
     // Validate inputs
     if (!validateName(credentials.name)) {
-      throw new AuthenticationError('Name must be at least 2 characters');
+      throw authError('Name must be at least 2 characters');
     }
 
     if (!validateEmail(credentials.email)) {
-      throw new AuthenticationError('Invalid email address');
+      throw authError('Invalid email address');
     }
 
     const passwordValidation = validatePassword(credentials.password);
     if (!passwordValidation.isValid) {
-      throw new AuthenticationError(passwordValidation.message);
+      throw authError(passwordValidation.message);
     }
 
     // Check if user already exists
     const existingUser = StorageService.findUserByEmail(credentials.email);
     if (existingUser) {
-      throw new AuthenticationError('Email already registered');
+      throw authError('Email already registered');
     }
 
     // Create new user
@@ -52,13 +52,13 @@ export const AuthService = {
     // Find user
     const user = StorageService.findUserByEmail(credentials.email);
     if (!user) {
-      throw new AuthenticationError('Invalid email or password');
+      throw authError('Invalid email or password');
     }
 
     // Verify password
     const storedPassword = localStorage.getItem(`password_${user.id}`);
     if (storedPassword !== credentials.password) {
-      throw new AuthenticationError('Invalid email or password');
+      throw authError('Invalid email or password');
     }
 
     return user;

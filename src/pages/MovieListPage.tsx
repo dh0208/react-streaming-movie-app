@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type JSX } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { searchMovies } from '../services/tmdb';
 import { Header } from '../components/layout/Header';
