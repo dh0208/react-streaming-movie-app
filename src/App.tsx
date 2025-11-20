@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProviderWrapper } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 import { AuthPage } from './pages/AuthPage';
@@ -7,6 +7,7 @@ import { HomePage } from './pages/HomePage';
 import { MovieDetailsPage } from './pages/MovieDetailsPage';
 import { FavoritesPage } from './pages/FavoritesPage';
 import { Loading } from './components/common/Loading';
+import MovieListPage from './pages/MovieListPage';
 
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -46,6 +47,7 @@ const AppRoutes: React.FC = () => {
           </PrivateRoute>
         }
       />
+      <Route path="/movie-list" element={<MovieListPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
@@ -53,11 +55,11 @@ const AppRoutes: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProviderWrapper>
         <AppRoutes />
       </AuthProviderWrapper>
-    </BrowserRouter>
+    </Router>
   );
 };
 

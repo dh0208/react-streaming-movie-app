@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { BiCameraMovie } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlineHeart } from 'react-icons/ai';
 import { useAuth } from '../../hooks/useAuth';
-import { useDebounce } from '../../hooks/useDebounce';
 
 export const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -11,13 +10,22 @@ export const Header: React.FC = () => {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const debouncedSearch = useDebounce(searchQuery, 500);
 
-  React.useEffect(() => {
-    if (debouncedSearch && location.pathname !== '/search') {
-      navigate(`/search?q=${encodeURIComponent(debouncedSearch)}`);
+  // Navigate to movie-list when user presses Enter in the search box
+  const handleSearchSubmit = () => {
+    const q = searchQuery.trim();
+    if (q) {
+      navigate(`/movie-list?q=${encodeURIComponent(q)}`);
     }
-  }, [debouncedSearch, navigate, location.pathname]);
+  };
+
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      (e.currentTarget as HTMLInputElement).blur();
+      handleSearchSubmit();
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -42,6 +50,7 @@ export const Header: React.FC = () => {
                 placeholder="Search movies..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
                 className="w-full px-4 py-2 pl-10 bg-dark-800 text-white rounded-lg border border-dark-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 transition-colors"
               />
               <AiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -107,6 +116,7 @@ export const Header: React.FC = () => {
               placeholder="Search movies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full px-4 py-2 pl-10 bg-dark-800 text-white rounded-lg border border-dark-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 transition-colors"
             />
             <AiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
